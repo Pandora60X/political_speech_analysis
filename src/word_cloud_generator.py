@@ -58,7 +58,7 @@ def part_of_speech(speech_words):
 
 
 def main():
-   with open('text/biden_fight_covid_19.txt', 'r', encoding="utf-8") as file:
+   with open('text/obama_address_to_nation_on_syria.txt', 'r', encoding="utf-8") as file:
       raw_speech=file.read()
 
    words = process_speech(raw_speech)
