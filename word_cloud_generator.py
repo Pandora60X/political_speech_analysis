@@ -34,7 +34,7 @@ def process_speech(text):
    return ' '.join(words)
 
 def main():
-   with open('address_to_the_nation_december_17.txt', 'r') as file:
+   with open('address_to_the_nation_on_iran.txt', 'r', encoding="utf-8") as file:
       raw_speech=file.read()
 
    speech_string = process_speech(raw_speech)
