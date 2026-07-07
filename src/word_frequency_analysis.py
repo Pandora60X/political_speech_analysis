@@ -36,10 +36,16 @@ def generate_wordcloud(speech_words):
    plt.imshow(speech_cloud)
    plt.show()
 
+
+'''Print
+- overall highest word frequency
+- highest word frequency by part of speech'''
 def part_of_speech(speech_words):
    frequency_words = Counter(speech_words)
 
    labeled_words = nltk.pos_tag(speech_words)
+
+   #Dictionary with labels as keys and list of words as values
    label_to_words={}
    for word, lbl in labeled_words:
       if lbl not in label_to_words:
@@ -47,6 +53,7 @@ def part_of_speech(speech_words):
       else:
          label_to_words[lbl].append(word)
    
+   #Dictionary with labels as keys and Counter object of words as values
    frequency_labeled_words = {}
    for lbl, words in label_to_words.items():
       frequency_labeled_words[lbl] = Counter(words)
@@ -58,7 +65,7 @@ def part_of_speech(speech_words):
 
 
 def main():
-   with open('text/obama_address_to_nation_on_syria.txt', 'r', encoding="utf-8") as file:
+   with open('text/trump_state_of_union_2_24_26.txt', 'r', encoding="utf-8") as file:
       raw_speech=file.read()
 
    words = process_speech(raw_speech)
