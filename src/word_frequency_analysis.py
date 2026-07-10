@@ -1,38 +1,15 @@
+from preprocessing import preprocess
+
 import re
 import nltk
-nltk.download('stopwords')
-nltk.download('punkt_tab')
-stopwords = nltk.corpus.stopwords.words('english')
-nltk.download('averaged_perceptron_tagger_eng')
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from collections import Counter
 
 
-'''Processing Steps:
-- clean
-- tokenize
-- remove stopwords
-'''
-def process_speech(text):
-   #Clean text by removing punctuation and numbers
-   text = text.lower()
-   text = re.sub(r'\W', ' ', text)
-   text = re.sub(r'\d', ' ', text)
-   
-   #Tokenize text
-   speech_tokens = nltk.tokenize.word_tokenize(text)
-
-   #Remove stopwords
-   stopword_set=set(nltk.corpus.stopwords.words('english'))
-
-   words = [word for word in speech_tokens if word not in stopword_set]
-
-   return words
-
-def generate_wordcloud(speech_words):
-   speech_cloud = WordCloud().generate(' '.join(speech_words))
+def generate_wordcloud(tokens):
+   speech_cloud = WordCloud().generate(' '.join(tokens))
    plt.imshow(speech_cloud)
    plt.show()
 
@@ -46,12 +23,16 @@ def part_of_speech(speech_words):
    labeled_words = nltk.pos_tag(speech_words)
 
    #Dictionary with labels as keys and list of words as values
-   label_to_words={}
+   label_to_words={'NOUN':[], 'VERB':[], 'ADJECTIVE':[], 'ADVERB':[]}
    for word, lbl in labeled_words:
-      if lbl not in label_to_words:
-         label_to_words[lbl]=[word]
-      else:
-         label_to_words[lbl].append(word)
+      if lbl.startswith("NN"):
+         label_to_words['NOUN'].append(word)
+      elif lbl.startswith("VB"):
+         label_to_words['VERB'].append(word)
+      elif lbl.startswith("JJ"):
+         label_to_words['ADJECTIVE'].append(word)
+      elif lbl.startswith("RB"):
+         label_to_words['ADVERB'].append(word)
    
    #Dictionary with labels as keys and Counter object of words as values
    frequency_labeled_words = {}
@@ -68,8 +49,8 @@ def main():
    with open('text/trump_state_of_union_2_24_26.txt', 'r', encoding="utf-8") as file:
       raw_speech=file.read()
 
-   words = process_speech(raw_speech)
-   part_of_speech(words)
+   tokens = preprocess(raw_speech)
+   part_of_speech(tokens)
 
 if __name__ == "__main__":
    main()
