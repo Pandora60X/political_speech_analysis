@@ -1,5 +1,6 @@
 import re
 import nltk
+import spacy
 
 STOPWORDS = nltk.corpus.stopwords.words('english')
 
@@ -26,7 +27,12 @@ def remove_stopwords(tokens):
    return clean_tokens
 
 def preprocess(text):
-   cleaned_text = clean_text(text)
-   tokens = tokenize(cleaned_text)
+   text = clean_text(text)
+   tokens = tokenize(text)
    clean_tokens = remove_stopwords(tokens)
    return clean_tokens
+
+def spacy_tokenize(text):
+   nlp = spacy.load("en_core_web_sm")
+   doc = nlp(text)
+   return doc
